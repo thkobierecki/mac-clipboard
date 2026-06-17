@@ -22,9 +22,18 @@ auto-evicted.
 ## Requirements
 
 - macOS 14 or later
-- Xcode 15 or later (to build it)
+- Xcode 15 or later (only needed to build from source)
 
-## Build & install
+## Install with Homebrew
+
+```sh
+brew install --cask thkobierecki/tap/clipboard-manager
+```
+
+The cask installs a signed & notarized build, so it launches without Gatekeeper
+warnings. (Releases are produced by CI — see [RELEASING.md](RELEASING.md).)
+
+## Build from source
 
 1. Clone the repo:
    ```sh
