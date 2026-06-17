@@ -20,6 +20,7 @@ final class PanelController: NSObject, NSWindowDelegate {
 
     private var statusItem: NSStatusItem!
     private var panel: KeyablePanel!
+    private var settingsWindow: NSWindow?
     private var keyMonitor: Any?
     private weak var previousApp: NSRunningApplication?
 
@@ -81,8 +82,17 @@ final class PanelController: NSObject, NSWindowDelegate {
 
     private func openSettings() {
         hide()
+        if settingsWindow == nil {
+            let window = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
+            window.title = "ClipboardManager Settings"
+            window.styleMask = [.titled, .closable]
+            window.isReleasedWhenClosed = false
+            window.center()
+            settingsWindow = window
+        }
         NSApp.activate()
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        settingsWindow?.makeKeyAndOrderFront(nil)
+        settingsWindow?.orderFrontRegardless()
     }
 
     // MARK: - Show / hide
