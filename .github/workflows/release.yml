@@ -45,22 +45,35 @@ jobs:
           security list-keychain -d user -s "$KEYCHAIN" $(security list-keychains -d user | sed s/\"//g)
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
 
-      - name: Build & sign (Developer ID, hardened runtime)
+      - name: Archive & export (Developer ID, deep-signed)
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           set -euo pipefail
-          xcodebuild \
+          cat > /tmp/ExportOptions.plist <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>developer-id</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild archive \
             -project ClipboardManager.xcodeproj \
             -scheme ClipboardManager \
             -configuration Release \
-            -derivedDataPath build \
+            -archivePath build/ClipboardManager.xcarchive \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Developer ID Application" \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            OTHER_CODE_SIGN_FLAGS="--timestamp" \
-            clean build
-          echo "APP_PATH=build/Build/Products/Release/ClipboardManager.app" >> "$GITHUB_ENV"
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+          xcodebuild -exportArchive \
+            -archivePath build/ClipboardManager.xcarchive \
+            -exportPath build/export \
+            -exportOptionsPlist /tmp/ExportOptions.plist
+          echo "APP_PATH=build/export/ClipboardManager.app" >> "$GITHUB_ENV"
 
       - name: Notarize & staple
         env:
@@ -74,9 +87,20 @@ jobs:
           mkdir -p dist
           ZIP="dist/ClipboardManager.zip"
           ditto -c -k --keepParent "$APP_PATH" "$ZIP"
-          xcrun notarytool submit "$ZIP" \
+          SUBMIT_JSON="$(xcrun notarytool submit "$ZIP" \
             --key "$KEY_PATH" --key-id "$AC_API_KEY_ID" --issuer "$AC_API_ISSUER_ID" \
-            --wait
+            --wait --output-format json)"
+          echo "$SUBMIT_JSON"
+          SUBMIT_ID="$(echo "$SUBMIT_JSON" | /usr/bin/python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')"
+          STATUS="$(echo "$SUBMIT_JSON" | /usr/bin/python3 -c 'import sys,json;print(json.load(sys.stdin)["status"])')"
+          echo "Notarization status: $STATUS"
+          # Always dump Apple's audit log — shows exactly what was rejected if Invalid.
+          xcrun notarytool log "$SUBMIT_ID" \
+            --key "$KEY_PATH" --key-id "$AC_API_KEY_ID" --issuer "$AC_API_ISSUER_ID" || true
+          if [ "$STATUS" != "Accepted" ]; then
+            echo "::error::Notarization failed with status $STATUS"
+            exit 1
+          fi
           xcrun stapler staple "$APP_PATH"
           rm "$ZIP"
           ditto -c -k --keepParent "$APP_PATH" "$ZIP"
