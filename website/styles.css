@@ -129,6 +129,20 @@ h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.05; letter-spacing: -
 
 /* Install */
 .install { padding: 24px 0 80px; }
+.brew {
+  max-width: 640px; margin: 0 auto;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 8px 8px 8px 18px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: var(--shadow);
+}
+.brew-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--accent); white-space: nowrap;
+}
+.brew pre { flex: 1; margin: 0; border: 0; background: color-mix(in srgb, var(--text) 6%, transparent); }
+.brew code { font-size: 0.88rem; }
+.alt-head { text-align: center; margin: 48px 0 28px; font-size: 1.15rem; color: var(--muted); font-weight: 600; }
 .steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; counter-reset: step; }
 .steps li { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; }
 .steps li::before {
@@ -155,6 +169,9 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.82re
   .grid { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: 1fr; }
   .nav-links a:first-child { display: none; }
+  .brew { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px; }
+  .brew pre { width: 100%; }
+  .brew code { white-space: pre-wrap; word-break: break-all; }
 }
 @media (max-width: 480px) {
   .grid { grid-template-columns: 1fr; }

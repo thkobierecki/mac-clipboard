@@ -113,7 +113,18 @@
 
     <section id="install" class="install">
       <div class="wrap">
-        <h2>Install in a couple of minutes</h2>
+        <h2>Install with one command</h2>
+        <div class="brew">
+          <span class="brew-label">Homebrew</span>
+          <pre><code>brew install --cask thkobierecki/tap/clipboard-manager</code></pre>
+        </div>
+        <p class="note">
+          Signed &amp; notarized, so it launches with no Gatekeeper warnings.
+          Requires macOS 14+. To paste directly into apps, grant Accessibility
+          access when prompted.
+        </p>
+
+        <h3 class="alt-head">Or build from source</h3>
         <ol class="steps">
           <li>
             <h3>Clone the repo</h3>
@@ -130,7 +141,6 @@ open ClipboardManager.xcodeproj</code></pre>
             <p>Drag the built <code>ClipboardManager.app</code> into <code>/Applications</code> and tick <em>Launch at login</em> in its menu.</p>
           </li>
         </ol>
-        <p class="note">Requires macOS 14 or later and Xcode 15+. To paste directly into apps, grant Accessibility access when prompted.</p>
       </div>
     </section>
   </main>
