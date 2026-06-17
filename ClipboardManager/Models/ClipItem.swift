@@ -1,18 +1,21 @@
 import Foundation
 
-/// One captured clip. Value type; `id` makes it usable directly in SwiftUI lists.
-struct ClipItem: Identifiable, Equatable {
-    let id = UUID()
+/// One captured clip. Codable so the store can persist history to disk.
+struct ClipItem: Identifiable, Equatable, Codable {
+    let id: UUID
     let text: String
     let createdAt: Date
+    var isPinned: Bool
 
-    init(text: String, createdAt: Date = Date()) {
+    init(id: UUID = UUID(), text: String, createdAt: Date = Date(), isPinned: Bool = false) {
+        self.id = id
         self.text = text
         self.createdAt = createdAt
+        self.isPinned = isPinned
     }
 
-    /// Single-line, truncated rendering for the menu (A4). Full `text` is still
-    /// what gets copied back on selection.
+    /// Single-line, truncated rendering for the menu. Full `text` is what gets
+    /// copied back on selection.
     var preview: String {
         let limit = 60
         let firstLine = text
@@ -22,7 +25,6 @@ struct ClipItem: Identifiable, Equatable {
         let trimmed = firstLine.trimmingCharacters(in: .whitespaces)
 
         if trimmed.isEmpty {
-            // Clip was only whitespace/newlines — show something rather than a blank row.
             return "⏎ (whitespace)"
         }
         if trimmed.count > limit {

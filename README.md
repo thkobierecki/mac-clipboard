@@ -1,15 +1,23 @@
 # ClipboardManager
 
-A lightweight macOS **menu bar** clipboard history utility. It keeps the last 15
-text clips you copy, so you can paste back something older than the single item
-macOS retains natively.
+A lightweight macOS **menu bar** clipboard history utility. It keeps your recent
+text clips so you can paste back something older than the single item macOS
+retains natively.
 
 - Lives only in the menu bar (no Dock icon).
 - Captures plain-text clips automatically as you copy them anywhere.
-- Click a clip → it becomes the current clipboard, ready to paste with ⌘V.
+- **Global hotkey** (⌘⇧V) opens the popup from any app.
+- **Search-as-you-type** to filter, **arrow keys + Enter** to pick, **⌘1–9** to
+  grab a recent clip instantly.
+- **Paste directly** into the active app (optional; needs Accessibility), or just
+  copy the clip and paste with ⌘V yourself.
+- **Pin favorites** so they stick to the top and survive the rolling cap.
+- **Persistent history** — clips are saved to disk and restored on next launch.
 - Skips passwords / secrets flagged by password managers (1Password, Apple
   Passwords, etc.) via the [nspasteboard.org](http://nspasteboard.org) convention.
-- History is in-memory only — it clears when the app quits.
+
+Unpinned history is capped at 15 items (oldest dropped). Pinned items are never
+auto-evicted.
 
 ## Requirements
 
@@ -51,19 +59,47 @@ After building, the app is in Xcode's Derived Data. To keep it around:
 
 ## Usage
 
-- Click the clipboard icon in the menu bar to see recent clips (newest first).
-- Click a clip to copy it back, then paste with ⌘V.
-- **Clear** wipes the history; **Quit** exits the app.
+- Open the popup: click the menu bar icon, or press **⌘⇧V** from anywhere.
+- **Type** to filter, **↑/↓** to move, **Enter** to pick, **⌘1–9** for a quick pick.
+- **Pin** a clip with the pin icon (appears on hover/selection) to keep it at the top.
+- **Paste to active app** (footer checkbox) pastes the chosen clip straight into
+  whatever app you were in. Leave it off to just put the clip on the clipboard
+  and paste with ⌘V yourself.
+- **Clear** removes unpinned clips; **Quit** exits the app.
+
+### Accessibility permission (for direct paste)
+
+The first time you select a clip with **Paste to active app** enabled, macOS
+prompts for Accessibility access (System Settings → Privacy & Security →
+Accessibility). Grant it so the app can simulate ⌘V. The clip is on the clipboard
+regardless, so manual ⌘V always works.
+
+> Rebuilding the app changes its signature and can reset the Accessibility grant.
+> A stable signed build (set a Team in Signing & Capabilities) avoids re-granting.
+
+### Rebinding the hotkey
+
+The global hotkey is ⌘⇧V, defined in
+[`PanelController.setupHotKey()`](ClipboardManager/Core/PanelController.swift) —
+change the `keyCode` / `modifiers` there.
+
+## Where history is stored
+
+`~/Library/Application Support/com.tomasz.ClipboardManager/history.json`
+(plain JSON). Delete this file to wipe persisted history.
 
 ## Architecture
 
-A single SwiftUI app target, `LSUIElement = YES` (menu-bar-only):
+A single SwiftUI app target, `LSUIElement = YES` (menu-bar-only). The UI is a
+custom `NSStatusItem` + floating `NSPanel` (not `MenuBarExtra`) so it can be
+opened by a global hotkey and host a focused search field.
 
 - `PasteboardWatcher` — polls `NSPasteboard.general.changeCount` every 0.4s
   (macOS has no clipboard-change event) and captures new text clips, filtering
   out our own writes and concealed secrets.
-- `ClipboardStore` — in-memory history (most-recent first, capped at 15), with
-  duplicate suppression.
-- `HistoryView` — the `MenuBarExtra` dropdown UI.
-
-History is intentionally not persisted across restarts in this version.
+- `ClipboardStore` — history (most-recent first, unpinned capped at 15), with
+  duplicate suppression, pinning, and JSON persistence.
+- `PanelController` — status item, popup panel, global hotkey, keyboard
+  navigation, and direct paste.
+- `HistoryView` — the popup UI (search, list, pins, footer).
+- `GlobalHotKey` / `Paster` — Carbon hotkey registration and synthesized ⌘V.

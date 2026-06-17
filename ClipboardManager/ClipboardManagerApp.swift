@@ -5,22 +5,26 @@ struct ClipboardManagerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
-        MenuBarExtra("Clipboard", systemImage: "doc.on.clipboard") {
-            HistoryView(store: appDelegate.store, launchAtLogin: appDelegate.launchAtLogin)
-        }
-        .menuBarExtraStyle(.window)
+        // The UI lives in a custom NSPanel managed by PanelController, so this
+        // app has no standard windows — an empty Settings scene satisfies the
+        // App protocol without showing anything.
+        Settings { EmptyView() }
     }
 }
 
-/// Owns the store + watcher so polling starts at launch (not lazily when the
-/// menu is first opened) and lives for the whole app lifetime.
+/// Owns the long-lived objects: store, pasteboard watcher, and the panel
+/// controller (status item + popup + hotkey).
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let store = ClipboardStore()
+    let menuState = MenuState()
     let launchAtLogin = LaunchAtLogin()
+
     private lazy var watcher = PasteboardWatcher(store: store)
+    private var panelController: PanelController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        panelController = PanelController(store: store, menuState: menuState, launchAtLogin: launchAtLogin)
         watcher.start()
     }
 }
