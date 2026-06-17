@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import KeyboardShortcuts
 import SwiftUI
 
 /// A borderless floating panel that can still become key (so the search field
@@ -20,7 +21,6 @@ final class PanelController: NSObject, NSWindowDelegate {
     private var statusItem: NSStatusItem!
     private var panel: KeyablePanel!
     private var keyMonitor: Any?
-    private var hotKey: GlobalHotKey?
     private weak var previousApp: NSRunningApplication?
 
     init(store: ClipboardStore, menuState: MenuState, launchAtLogin: LaunchAtLogin) {
@@ -49,7 +49,8 @@ final class PanelController: NSObject, NSWindowDelegate {
             store: store,
             menuState: menuState,
             launchAtLogin: launchAtLogin,
-            onSelect: { [weak self] in self?.activate($0) }
+            onSelect: { [weak self] in self?.activate($0) },
+            onOpenSettings: { [weak self] in self?.openSettings() }
         )
         let hosting = NSHostingView(rootView: view)
         hosting.autoresizingMask = [.width, .height]
@@ -71,10 +72,17 @@ final class PanelController: NSObject, NSWindowDelegate {
     }
 
     private func setupHotKey() {
-        // ⌘⇧V — change keyCode/modifiers here to rebind.
-        hotKey = GlobalHotKey(keyCode: 9, modifiers: UInt32(cmdKey | shiftKey)) { [weak self] in
-            DispatchQueue.main.async { self?.toggle() }
+        // Default is ⌘⇧V (see KeyboardShortcuts.Name.toggleClipboard); the user
+        // can rebind it in Settings.
+        KeyboardShortcuts.onKeyUp(for: .toggleClipboard) { [weak self] in
+            MainActor.assumeIsolated { self?.toggle() }
         }
+    }
+
+    private func openSettings() {
+        hide()
+        NSApp.activate()
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     }
 
     // MARK: - Show / hide

@@ -5,6 +5,7 @@ struct HistoryView: View {
     @ObservedObject var menuState: MenuState
     @ObservedObject var launchAtLogin: LaunchAtLogin
     var onSelect: (ClipItem) -> Void
+    var onOpenSettings: () -> Void
 
     @FocusState private var searchFocused: Bool
 
@@ -120,6 +121,7 @@ struct HistoryView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
+                Button("Settings…", action: onOpenSettings)
                 Button("Clear", action: store.clear)
                     .disabled(store.items.allSatisfy(\.isPinned))
                 Button("Quit") { NSApplication.shared.terminate(nil) }

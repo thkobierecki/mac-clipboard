@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA0000000000000000000102 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000101 /* KeyboardShortcuts */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		AA00000000000000000000A1 /* ClipboardManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClipboardManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -15,7 +19,9 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AA00000000000000000000C1 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AA00000000000000000000C1 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
+			AA0000000000000000000102 /* KeyboardShortcuts in Frameworks */,
+		); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -35,7 +41,9 @@
 			AA00000000000000000000E3 /* Resources */,
 		); buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (
 			AA00000000000000000000B1 /* ClipboardManager */,
-		); name = ClipboardManager; packageProductDependencies = (); productName = ClipboardManager; productReference = AA00000000000000000000A1 /* ClipboardManager.app */; productType = "com.apple.product-type.application"; };
+		); name = ClipboardManager; packageProductDependencies = (
+			AA0000000000000000000101 /* KeyboardShortcuts */,
+		); productName = ClipboardManager; productReference = AA00000000000000000000A1 /* ClipboardManager.app */; productType = "com.apple.product-type.application"; };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -51,7 +59,9 @@
 		}; buildConfigurationList = AA0000000000000000000002 /* Build configuration list for PBXProject "ClipboardManager" */; compatibilityVersion = "Xcode 15.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (
 			en,
 			Base,
-		); mainGroup = AA00000000000000000000D1; minimizedProjectReferenceProxies = 1; preferredProjectObjectVersion = 77; productRefGroup = AA00000000000000000000D2 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (
+		); mainGroup = AA00000000000000000000D1; minimizedProjectReferenceProxies = 1; packageReferences = (
+			AA0000000000000000000100 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+		); preferredProjectObjectVersion = 77; productRefGroup = AA00000000000000000000D2 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (
 			AA00000000000000000000E1 /* ClipboardManager */,
 		); };
 /* End PBXProject section */
@@ -227,6 +237,25 @@
 			AA0000000000000000000013 /* Release */,
 		); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA0000000000000000000100 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA0000000000000000000101 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA0000000000000000000100 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA0000000000000000000001 /* Project object */;
 }

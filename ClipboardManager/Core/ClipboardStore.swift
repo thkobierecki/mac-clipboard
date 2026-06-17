@@ -8,6 +8,10 @@ final class ClipboardStore: ObservableObject {
     /// Cap applies to *unpinned* clips; pinned ones are never auto-evicted.
     static let historyCap = 15
 
+    /// Live instance, so App Intents (which the system instantiates) can reach
+    /// the running app's history.
+    static private(set) var shared: ClipboardStore?
+
     @Published private(set) var items: [ClipItem] = []
 
     /// Guards so the watcher ignores our own pasteboard writes (§7.2).
@@ -19,6 +23,7 @@ final class ClipboardStore: ObservableObject {
     init() {
         saveURL = Self.makeSaveURL()
         load()
+        Self.shared = self
     }
 
     // MARK: - Display / search

@@ -15,3 +15,6 @@ xcuserdata/
 # Swift Package Manager
 .build/
 .swiftpm/
+
+# Local SwiftPM clone cache (xcodebuild -clonedSourcePackagesDirPath)
+.spm-cache/

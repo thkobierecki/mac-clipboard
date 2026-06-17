@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClipboardManager — a tiny clipboard history for macOS</title>
+  <meta name="description" content="A lightweight macOS menu bar app that keeps a searchable history of your recent clips. Open-source, free, privacy-respecting." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='2' width='8' height='4' rx='1'/%3E%3Cpath d='M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'/%3E%3C/svg%3E" />
+  <meta property="og:title" content="ClipboardManager for macOS" />
+  <meta property="og:description" content="A lightweight, open-source clipboard history that lives in your menu bar." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+        ClipboardManager
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/thkobierecki/mac-clipboard">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="pill">Free &amp; open-source · macOS 14+</span>
+          <h1>Your clipboard,<br /><span class="grad">with a memory.</span></h1>
+          <p class="lead">
+            macOS forgets everything you copy except the last thing. ClipboardManager
+            keeps a searchable history in your menu bar, so the thing you copied five
+            minutes ago is still one keystroke away.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/thkobierecki/mac-clipboard">Get it on GitHub</a>
+            <a class="btn btn-ghost" href="#install">How to install</a>
+          </div>
+          <p class="fineprint">Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>V</kbd> anywhere to open it.</p>
+        </div>
+
+        <!-- CSS mockup of the popup -->
+        <div class="mock" aria-hidden="true">
+          <div class="mock-menubar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          </div>
+          <div class="mock-panel">
+            <div class="mock-search"><span>🔍</span><i>git</i></div>
+            <div class="mock-list">
+              <div class="mock-row sel"><b>1</b><span>git push origin main</span><em>📌</em></div>
+              <div class="mock-row"><b>2</b><span>https://github.com/thkobierecki/mac-clipboard</span></div>
+              <div class="mock-row"><b>3</b><span>git rebase -i HEAD~3</span></div>
+              <div class="mock-row"><b>4</b><span>console.log('hello world')</span></div>
+            </div>
+            <div class="mock-foot"><span>4 clips</span><div><i>Settings…</i><i>Clear</i></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="wrap">
+        <h2>Everything you'd expect, nothing you don't</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="ico">🕑</div>
+            <h3>Automatic history</h3>
+            <p>Every text clip you copy is captured automatically and kept newest-first.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🔎</div>
+            <h3>Search &amp; keyboard-first</h3>
+            <p>Type to filter, <kbd>↑</kbd>/<kbd>↓</kbd> to move, <kbd>↵</kbd> to paste, <kbd>⌘1–9</kbd> for a quick pick.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⌨️</div>
+            <h3>Global hotkey</h3>
+            <p>Open the popup from any app with a shortcut you can rebind in Settings.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⚡</div>
+            <h3>Paste directly</h3>
+            <p>Pick a clip and it pastes straight into the app you were using.</p>
+          </div>
+          <div class="card">
+            <div class="ico">📌</div>
+            <h3>Pin favorites</h3>
+            <p>Pin the clips you reuse so they stick to the top and never expire.</p>
+          </div>
+          <div class="card">
+            <div class="ico">💾</div>
+            <h3>Remembers across restarts</h3>
+            <p>History is saved locally and restored the next time you launch.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🔒</div>
+            <h3>Privacy-respecting</h3>
+            <p>Skips passwords and secrets flagged by password managers. Nothing leaves your Mac.</p>
+          </div>
+          <div class="card">
+            <div class="ico">🤖</div>
+            <h3>Shortcuts integration</h3>
+            <p>Automate clips with the macOS Shortcuts app via built-in App Intents.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="install">
+      <div class="wrap">
+        <h2>Install in a couple of minutes</h2>
+        <ol class="steps">
+          <li>
+            <h3>Clone the repo</h3>
+            <pre><code>git clone https://github.com/thkobierecki/mac-clipboard.git
+cd mac-clipboard
+open ClipboardManager.xcodeproj</code></pre>
+          </li>
+          <li>
+            <h3>Build &amp; run</h3>
+            <p>In Xcode, set a signing <em>Team</em> (your Apple ID) under Signing &amp; Capabilities, then press <kbd>⌘R</kbd>. A clipboard icon appears in your menu bar.</p>
+          </li>
+          <li>
+            <h3>Keep it around</h3>
+            <p>Drag the built <code>ClipboardManager.app</code> into <code>/Applications</code> and tick <em>Launch at login</em> in its menu.</p>
+          </li>
+        </ol>
+        <p class="note">Requires macOS 14 or later and Xcode 15+. To paste directly into apps, grant Accessibility access when prompted.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <span>MIT licensed · made for personal use</span>
+      <span>Inspired by <a href="https://maccy.app/">Maccy</a>. Not affiliated. · <a href="https://github.com/thkobierecki/mac-clipboard">Source on GitHub</a></span>
+    </div>
+  </footer>
+</body>
+</html>
