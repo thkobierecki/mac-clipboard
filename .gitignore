@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Xcode per-user data (keep the shared scheme, ignore user state)
+xcuserdata/
+**/xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
